@@ -1,0 +1,25 @@
+{
+  "name": "scribes-s3-to-firebase",
+  "version": "1.0.0",
+  "description": "Tool to move public comment files from S3 to firebase",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drospond/scribes-s3-to-firebase.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/drospond/scribes-s3-to-firebase/issues"
+  },
+  "homepage": "https://github.com/drospond/scribes-s3-to-firebase#readme",
+  "dependencies": {
+    "aws-sdk": "^2.739.0",
+    "dotenv": "^8.2.0",
+    "sha1": "^1.1.1"
+  }
+}
