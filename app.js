@@ -1,16 +1,13 @@
 // const sha1 = require('sha1');
 const AWS = require("aws-sdk");
 require("dotenv").config();
+//used for CLI prompts
 const inquirer = require("inquirer");
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
-
-// const storage = new Storage({
-//     keyFilename: <server-key-file-path>,
-//  });
 
 const listRootDirectoriesParams = {
   Bucket: "atlscribes.org-recordings",
@@ -31,7 +28,10 @@ const getParams = {
 //   }
 // });
 
-function chooseDirecotryPrompt() {
+/**
+ * @func chooseDirectoryPrompt prompts the user to select directories to import to Firebase
+ */
+function chooseDirectoryPrompt() {
   inquirer
     .prompt([
       {
@@ -70,6 +70,6 @@ s3.listObjectsV2(listRootDirectoriesParams, (err, data) => {
     data.CommonPrefixes.forEach((dir) => {
       directoryList.push(dir.Prefix);
     });
-    chooseDirecotryPrompt();
+    chooseDirectoryPrompt();
   }
 });

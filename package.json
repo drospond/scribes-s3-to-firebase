@@ -18,9 +18,9 @@
   },
   "homepage": "https://github.com/drospond/scribes-s3-to-firebase#readme",
   "dependencies": {
-    "@google-cloud/storage": "^5.3.0",
     "aws-sdk": "^2.739.0",
     "dotenv": "^8.2.0",
+    "firebase-admin": "^9.1.1",
     "inquirer": "^7.3.3",
     "sha1": "^1.1.1"
   }
