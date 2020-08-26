@@ -13,6 +13,13 @@ const s3 = new AWS.S3({
 //     keyFilename: <server-key-file-path>,
 //  });
 
+
+const listRootDirectoriesParams = {
+    Bucket: "atlscribes.org-recordings",
+    MaxKeys: 200,
+    Delimiter: "/",
+  };
+
 const getParams = {
   Bucket: "atlscribes.org-recordings",
   Key: "2020-06-15 Full Council/VoiceMessage (1).wav",
@@ -26,34 +33,30 @@ const getParams = {
 //   }
 // });
 
-function testPrompt(){
+function chooseDirecotry(){
     inquirer.prompt([
         {
           type: "checkbox",
           name: "answer",
           message: "Select a directory of public comments to import to firebase.",
-          choices: directories
+          choices: directoryList
         }
       ]).then((res)=>{
           console.log(`Your answer: ${res.answer}`);
     })
   }
 
-const listObjectParams = {
-  Bucket: "atlscribes.org-recordings",
-  MaxKeys: 20,
-  Delimiter: "/",
-};
 
-const directories = [];
-s3.listObjectsV2(listObjectParams, (err, data) => {
+
+const directoryList = [];
+s3.listObjectsV2(listRootDirectoriesParams, (err, data) => {
   if (err) {
     reject(err);
   }else {
     data.CommonPrefixes.forEach(dir => {
-        directories.push(dir.Prefix);
+        directoryList.push(dir.Prefix);
     })
-    testPrompt();
+    chooseDirecotry();
   }
 });
 
