@@ -1,14 +1,9 @@
 const sha1 = require('sha1');
-const AWS = require("aws-sdk");
 require("dotenv").config();
 //used for CLI prompts
 const inquirer = require("inquirer");
-const firebaseDB = require('./firebaseConfig');
-
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
+const firebaseDB = require('./databaseConfig/firebaseConfig');
+const s3 = require("./databaseConfig/s3Config");
 
 const listRootDirectoriesParams = {
   Bucket: "atlscribes.org-recordings",
@@ -16,10 +11,10 @@ const listRootDirectoriesParams = {
   Delimiter: "/",
 };
 
-const getParams = {
-  Bucket: "atlscribes.org-recordings",
-  Key: "2020-06-15 Full Council/VoiceMessage (1).wav",
-};
+// const getParams = {
+//   Bucket: "atlscribes.org-recordings",
+//   Key: "2020-06-15 Full Council/VoiceMessage (1).wav",
+// };
 
 // s3.getObject(getParams, function (err, data) {
 //   if (err) {
