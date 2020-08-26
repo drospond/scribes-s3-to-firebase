@@ -10,4 +10,4 @@ const db = admin.firestore();
 
 const collectionRef = db.collection('entries');
 
-export default collectionRef;
+module.exports = collectionRef;

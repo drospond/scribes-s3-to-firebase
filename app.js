@@ -1,8 +1,9 @@
-// const sha1 = require('sha1');
+const sha1 = require('sha1');
 const AWS = require("aws-sdk");
 require("dotenv").config();
 //used for CLI prompts
 const inquirer = require("inquirer");
+const firebaseDB = require('./firebaseConfig');
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
