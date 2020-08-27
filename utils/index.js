@@ -22,8 +22,10 @@ const setFirebaseObject = function (textFile, wavFile, dir) {
         const entryObject = {
           wavURl: urlEncodeS3Key(wavFile.Key),
           text: data.Body.toString(),
+          status: "new",
+          leased: false
         };
-        const docRef = firebaseDB.collection(dir).doc(wavFile.ETag);
+        const docRef = firebaseDB.doc(dir).collection("entries").doc(wavFile.ETag);
         docRef.set({entryObject});
       }
     });

@@ -8,6 +8,6 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-const collectionRef = db.collection("entries").doc("entries");
+const collectionRef = db.collection("sessions");
 
 module.exports = collectionRef;
