@@ -2,7 +2,7 @@ const sha1 = require('sha1');
 require("dotenv").config();
 //used for CLI prompts
 const inquirer = require("inquirer");
-const firebaseDB = require('./databaseConfig/firebaseConfig');
+const utils = require("./utils");
 const s3 = require("./databaseConfig/s3Config");
 
 const listRootDirectoriesParams = {
@@ -10,19 +10,6 @@ const listRootDirectoriesParams = {
   MaxKeys: 200,
   Delimiter: "/",
 };
-
-// const getParams = {
-//   Bucket: "atlscribes.org-recordings",
-//   Key: "2020-06-15 Full Council/VoiceMessage (1).wav",
-// };
-
-// s3.getObject(getParams, function (err, data) {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     console.log(data.Body);
-//   }
-// });
 
 /**
  * @func chooseDirectoryPrompt prompts the user to select directories to import to Firebase
@@ -51,7 +38,8 @@ function chooseDirectoryPrompt() {
                 if (err) {
                   reject(err);
                 } else {
-                  console.log(data);
+                  // console.log(data.Contents);
+                  utils.entryPairing(data.Contents, directoriesToImport[i])
                 }
               });
         }

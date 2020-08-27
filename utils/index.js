@@ -1,5 +1,6 @@
 require("dotenv").config();
 const s3 = require("../databaseConfig/s3Config");
+const firebaseDB = require("../databaseConfig/firebaseConfig");
 
 /**
  * 
@@ -9,26 +10,26 @@ const urlEncodeS3Key = function(text){
     return `https://s3.us-east-1.amazonaws.com/atlscribes.org-recordings/${encodeURIComponent(text)}`
 }
 
-const constructEntryObject = function(textFile, wavFile){
+const setFirebaseObject = function (textFile, wavFile, dir) {
     const getParams = {
-        Bucket: "atlscribes.org-recordings",
-        Key: textFile.Key,
+      Bucket: "atlscribes.org-recordings",
+      Key: textFile.Key,
     };
-    s3.getObject(getParams, function (err, data) {
-        if (err) {
-            console.log(err);
-        } else {
-            entryObject ={
-                wavURl: urlEncodeS3Key(wavFile.Key),
-                wavETag: wavFile.ETag,
-                text: data.Body.toString()
-            }
-            return entryObject;
-        }
+    s3.getObject(getParams, async function (err, data) {
+      if (err) {
+        console.log(err);
+      } else {
+        const entryObject = {
+          wavURl: urlEncodeS3Key(wavFile.Key),
+          text: data.Body.toString(),
+        };
+        const docRef = firebaseDB.collection(dir).doc(wavFile.ETag);
+        docRef.set({entryObject});
+      }
     });
-}
+  };
 
-const entryPairing = function (entries) {
+exports.entryPairing = function(entries, dir) {
     for (let i = 0; i < entries.length; i++) {
       let textFile = false;
       let wavFile = false;
@@ -46,7 +47,7 @@ const entryPairing = function (entries) {
         continue;
       }
       if (textFile && wavFile) {
-        constructEntryObject(textFile, wavFile);
+        setFirebaseObject(textFile, wavFile, dir);
       }
     }
   };
