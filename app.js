@@ -38,8 +38,7 @@ function chooseDirectoryPrompt() {
                 if (err) {
                   reject(err);
                 } else {
-                  // console.log(data.Contents);
-                  utils.entryPairing(data.Contents, directoriesToImport[i])
+                  utils.importToFireBase(data.Contents, directoriesToImport[i])
                 }
               });
         }
