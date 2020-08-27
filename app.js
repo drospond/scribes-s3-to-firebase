@@ -2,7 +2,7 @@ const sha1 = require('sha1');
 require("dotenv").config();
 //used for CLI prompts
 const inquirer = require("inquirer");
-const utils = require("./utils");
+const fbUtils = require("./firebaseUtils");
 const s3 = require("./databaseConfig/s3Config");
 
 const listRootDirectoriesParams = {
@@ -38,7 +38,7 @@ function chooseDirectoryPrompt() {
                 if (err) {
                   reject(err);
                 } else {
-                  utils.importToFireBase(data.Contents, directoriesToImport[i])
+                  fbUtils.importToFireBase(data.Contents, directoriesToImport[i])
                 }
               });
         }
