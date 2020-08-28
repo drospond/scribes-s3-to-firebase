@@ -19,7 +19,7 @@ function chooseDirectoryPrompt() {
       {
         type: "checkbox",
         name: "answer",
-        message: "Select a directory of public comments to import to firebase.",
+        message: "Select one or more session directories of public comments to import to firebase.",
         choices: directoryList,
       },
     ])
@@ -45,6 +45,8 @@ function chooseDirectoryPrompt() {
 }
 
 const directoryList = [];
+
+//Gets session names in S3 and starts prompt
 s3.listObjectsV2(listRootDirectoriesParams, (err, data) => {
   if (err) {
     reject(err);
@@ -52,6 +54,8 @@ s3.listObjectsV2(listRootDirectoriesParams, (err, data) => {
     data.CommonPrefixes.forEach((dir) => {
       directoryList.push(dir.Prefix);
     });
+    console.log("Welcome to the S3 to Firestore CLI for Atlscribes.");
+    console.log("Use the arrow keys to scroll through and select sessions to import with the space bar. Press enter to confirm.");
     chooseDirectoryPrompt();
   }
 });
