@@ -16,9 +16,9 @@ const urlEncodeS3Key = function (text) {
  * @func setFirebaseObject constucts object from S3 text and wav file and saves to Firebase
  * @param {Object} textFile - S3 object of entry text file
  * @param {Object} wavFile -S3 object of entry wav audio file
- * @param {string} dir - directory name of current session for entries
+ * @param {string} sessionDirectory - directory name of current session for entries
  */
-const setFirebaseObject = function (textFile, wavFile, dir) {
+const setFirebaseObject = function (textFile, wavFile, sessionDirectory) {
   const getParams = {
     Bucket: "atlscribes.org-recordings",
     Key: textFile.Key,
@@ -34,7 +34,7 @@ const setFirebaseObject = function (textFile, wavFile, dir) {
         leased: false,
       };
       const docRef = firebaseDB
-        .doc(dir)
+        .doc(sessionDirectory)
         .collection("entries")
         .doc(wavFile.ETag);
       docRef.set({ entryObject });
@@ -45,14 +45,24 @@ const setFirebaseObject = function (textFile, wavFile, dir) {
 /**
  * @func importToFireBase imports session entries into Firebase
  * @param {Object[]} entries - entries of current session to import
- * @param {string} dir - directory name of current session for entries
+ * @param {string} sessionDirectory - directory name of current session for entries
  */
-exports.importToFireBase = function (entries, dir) {
+exports.importToFireBase = function (entries, sessionDirectory) {
   for (let i = 0; i < entries.length; i++) {
     let textFile = false;
     let wavFile = false;
     const fileExtension = entries[i].Key.split(".").pop();
     const entryKey = entries[i].Key.substr(0, entries[i].Key.length - 4);
+    if (fileExtension === "wav") {
+      textFile = entries.find((entry) => {
+        if (entry.Key === `${entryKey}.txt`) return true;
+      });
+      if (!textFile) {
+        console.log("No match found for: ", entries[i].Key);
+      }
+    } else{
+      continue;
+    }
     if (fileExtension === "txt") {
       textFile = entries[i];
       wavFile = entries.find((entry) => {
@@ -65,7 +75,7 @@ exports.importToFireBase = function (entries, dir) {
       continue;
     }
     if (textFile && wavFile) {
-      setFirebaseObject(textFile, wavFile, dir);
+      setFirebaseObject(textFile, wavFile, sessionDirectory);
     }
   }
 };
