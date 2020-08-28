@@ -48,6 +48,7 @@ const setFirebaseObject = function (textFile, wavFile, sessionDirectory) {
  * @param {string} sessionDirectory - directory name of current session for entries
  */
 exports.importToFireBase = function (entries, sessionDirectory) {
+  let entryImportCount = 0;
   for (let i = 0; i < entries.length; i++) {
     let textFile = false;
     let wavFile = false;
@@ -60,10 +61,7 @@ exports.importToFireBase = function (entries, sessionDirectory) {
       if (!textFile) {
         console.log("No match found for: ", entries[i].Key);
       }
-    } else{
-      continue;
-    }
-    if (fileExtension === "txt") {
+    } else if (fileExtension === "txt") {
       textFile = entries[i];
       wavFile = entries.find((entry) => {
         if (entry.Key === `${entryKey}.wav`) return true;
@@ -76,6 +74,8 @@ exports.importToFireBase = function (entries, sessionDirectory) {
     }
     if (textFile && wavFile) {
       setFirebaseObject(textFile, wavFile, sessionDirectory);
+      entryImportCount++;
     }
   }
+  console.log(`Imported ${entryImportCount} entries for ${sessionDirectory}`);
 };
