@@ -1,4 +1,3 @@
-const sha1 = require('sha1');
 require("dotenv").config();
 //used for CLI prompts
 const inquirer = require("inquirer");
